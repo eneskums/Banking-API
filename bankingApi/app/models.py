@@ -27,18 +27,10 @@ class Account(models.Model):
 
 
 class Transfer(models.Model):
-    source_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='source_account')
-    destination_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='destination_account')
+    sender_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='sender_account')
+    receiver_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='receiver_account')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
-        return f'{self.transaction_id} - {self.source_account} to {self.destination_account}'
-
-
-class Log(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    from_account = models.ForeignKey(Account, related_name='logs_sent', on_delete=models.CASCADE)
-    to_account = models.ForeignKey(Account, related_name='logs_received', on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+        return f'{self.amount} - {self.sender_account} to {self.receiver_account}'
