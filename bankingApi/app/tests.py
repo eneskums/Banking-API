@@ -43,7 +43,7 @@ class BankingAPITests(APITestCase):
         }
         response = self.client.post(url, data, format='json')
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Customer with id 9999 does not exist')
 
     def test_transfer(self):
@@ -145,7 +145,7 @@ class BankingAPITests(APITestCase):
         url = reverse('account_balance', kwargs={'account_id': 9999})
         response = self.client.get(url)
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Account with given id does not exist')
 
     def test_get_transfer_history(self):
@@ -184,7 +184,7 @@ class BankingAPITests(APITestCase):
         url = reverse('transfer_history', kwargs={'account_id': 9999})
         response = self.client.get(url)
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response.data['error'], 'Account with given id does not exist')
 
     def test_get_transfer_history_filter_by_date(self):

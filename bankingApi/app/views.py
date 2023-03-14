@@ -34,7 +34,7 @@ def create_account(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     except Customer.DoesNotExist:
         return Response({'error': 'Customer with id {} does not exist'.format(customer_id)},
-                        status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['POST'])
@@ -72,7 +72,7 @@ def transfer(request):
 
             return Response(transfer_serializer.data, status=status.HTTP_201_CREATED)
     except Account.DoesNotExist:
-        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -80,9 +80,9 @@ def transfer(request):
 def account_balance(request, account_id):
     try:
         account = Account.objects.get(pk=account_id)
-        return Response({'balance': account.balance})
+        return Response({'account_id': account.id, 'balance': account.balance})
     except Account.DoesNotExist:
-        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET'])
@@ -101,4 +101,4 @@ def transfer_history(request, account_id):
         serializer = TransferSerializer(transfers, many=True)
         return Response(serializer.data)
     except Account.DoesNotExist:
-        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Account with given id does not exist'}, status=status.HTTP_404_NOT_FOUND)
